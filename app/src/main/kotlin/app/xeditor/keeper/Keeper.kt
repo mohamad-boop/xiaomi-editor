@@ -117,7 +117,10 @@ object Keeper {
         val n = NotificationCompat.Builder(ctx, CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_keeper)
             .setContentTitle("Re-apply ${themeName(ctx) ?: "your theme"}")
-            .setContentText("Tap if HyperOS reset your theme — then apply it again from My themes")
+            .setContentText(
+                if (ThemeApplier.hasThemeManager(ctx)) "Tap to re-apply. If asked for a file, pick keeper.mtz in Download › XiaomiEditor › temp"
+                else "Tap if HyperOS reset your theme — then apply it again from My themes",
+            )
             .setContentIntent(pi)
             .setAutoCancel(true)
             .build()

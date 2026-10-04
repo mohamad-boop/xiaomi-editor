@@ -106,7 +106,7 @@ class KeeperViewModel(app: Application) : AndroidViewModel(app) {
                         Keeper.setTheme(ctx, ctx.displayNameOf(uri), it)
                     } ?: error("Can't read that file")
                 }
-                "Theme saved. Tap Apply now to apply it."
+                "Theme saved. Tap Re-apply now to apply it."
             }.getOrElse { it.message ?: it.toString() }
             _state.update { it.copy(busy = null, message = msg) }
             refresh()
@@ -180,6 +180,20 @@ fun KeeperScreen(vm: KeeperViewModel = viewModel()) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item { StatusBanner(s.busy, s.message, vm::dismissMessage) }
+            if (s.canApplyDirectly) item {
+                androidx.compose.material3.Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp),
+                ) {
+                    Text(
+                        "This phone's theme manager can re-apply themes: the keeper does it after every reboot, and Re-apply now does it " +
+                            "any time. If the Themes app asks you to pick a file, choose keeper.mtz in Download › XiaomiEditor › temp.",
+                        modifier = Modifier.padding(14.dp),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
+            }
             if (!s.canApplyDirectly) item {
                 androidx.compose.material3.Surface(
                     color = MaterialTheme.colorScheme.errorContainer,
@@ -222,7 +236,7 @@ fun KeeperScreen(vm: KeeperViewModel = viewModel()) {
                         Switch(checked = s.enabled, onCheckedChange = vm::setEnabled, enabled = s.themeName != null)
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Button(onClick = { vm.applyNow(ctx) }, enabled = s.themeName != null && s.busy == null) { Text("Apply now") }
+                        Button(onClick = { vm.applyNow(ctx) }, enabled = s.themeName != null && s.busy == null) { Text("Re-apply now") }
                         OutlinedButton(onClick = { pickMtz.launch(arrayOf("*/*")) }) { Text("Pick .mtz") }
                     }
                 }

@@ -35,7 +35,7 @@ import app.xeditor.ui.KeeperScreen
 import app.xeditor.ui.theme.XEditorTheme
 
 private enum class Tab(val label: String, val icon: ImageVector) {
-    EDITOR("Editor", Icons.Outlined.Palette),
+    EDITOR("Builder", Icons.Outlined.Palette),
     BOOT("Boot animation", Icons.Outlined.PlayCircle),
     KEEPER("Keeper", Icons.Outlined.Shield),
 }

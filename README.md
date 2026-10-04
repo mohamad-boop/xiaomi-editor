@@ -1,10 +1,10 @@
 # Xiaomi Editor
 
-An ad-free Android app for making and editing MIUI / HyperOS themes (`.mtz`) on the phone itself — with a boot animation studio and on-device previews.
+An ad-free **theme builder** for MIUI and HyperOS. Build complete themes (`.mtz`) on the phone itself — from scratch or on top of an existing theme — with a boot animation studio and live previews of almost everything.
 
 ## What it does
 
-**Theme editor** — open an existing `.mtz`, an installed theme (via Shizuku), or start from scratch, then edit:
+**Theme builder** — start from scratch, or build on an existing `.mtz` or a theme installed on your phone (via Shizuku), and put together:
 
 - Wallpapers (home & lock screen), with "set as phone wallpaper now"
 - App icons: import a whole icon pack (auto-matched by `appfilter.xml`), pick icons per app from a searchable grid, recolour, icon mask & folder shapes, dynamic calendar/clock icons, icon size & label colour
@@ -21,7 +21,7 @@ An ad-free Android app for making and editing MIUI / HyperOS themes (`.mtz`) on 
 
 **Boot animation studio** — build a `bootanimation.zip` from a video, GIF, image frames or an existing zip: full-screen frames, size / position controls, loop or play-once, optional boot sound, palette compression (256/128/64 colours), live preview. Add it to the theme or export a Magisk module for rooted phones.
 
-**Keeper** — re-applies a chosen theme after reboot on MIUI / HyperOS versions that still expose the theme manager's apply entry point.
+**Apply & Keeper** — on MIUI and HyperOS versions whose theme manager still has a direct apply route, **Apply** applies the theme straight away and **Apply & keep** has the Keeper re-apply it after every reboot (plus **Re-apply now** any time). The app detects this automatically and shows the right buttons for your phone.
 
 ## How to use
 
@@ -30,9 +30,9 @@ An ad-free Android app for making and editing MIUI / HyperOS themes (`.mtz`) on 
 1. Download the APK from the [Releases page](https://github.com/mohamad-boop/xiaomi-editor/releases) (or build it — see below) and install it. Android will ask you to allow installing from your browser or file manager.
 2. Optional but recommended: install [Shizuku](https://shizuku.rikka.app/) and start it (wireless debugging or root). Open Xiaomi Editor and tap **Allow** on the Shizuku card. Shizuku unlocks reading your installed themes, installing into the Themes app, the fingerprint-animation switch, accurate sensor position, sound protection and one-tap permission setup.
 
-### Make a theme
+### Build a theme
 
-1. **Editor** tab → **Open .mtz**, **Pick an installed theme** (Shizuku), **Pick a theme from a folder**, or **Start from scratch**.
+1. **Builder** tab → **Start from scratch**, or build on an existing theme: **Build on an installed theme** (Shizuku), **Build on a .mtz file**, or **Build on a theme from a folder**.
 2. Tap any tile to edit that part. Tiles with a dot have changes. Most pages show a preview at the top; **Preview theme** shows everything at once.
 3. **Description** sets the name the Themes app shows.
 4. **Presets & reset** saves your choices to reuse on another theme, or undoes one section.
@@ -69,7 +69,7 @@ An ad-free Android app for making and editing MIUI / HyperOS themes (`.mtz`) on 
 ### Apply
 
 - **Export** — save the `.mtz` (choose name and folder) or **Install to Themes app** via Shizuku.
-- **Apply / Apply & keep** (MIUI and HyperOS versions with a direct apply route) — hands the theme to the system theme manager; **Keeper** re-applies it after reboot. Temporary copies are cleaned up automatically.
+- **Apply / Apply & keep** (MIUI and HyperOS versions with a direct apply route) — hands the theme to the system theme manager. With **Apply & keep**, the **Keeper** tab re-applies it after every reboot, and **Re-apply now** does it on demand. If the Themes app asks you to pick a file, choose `keeper.mtz` (or `apply.mtz`) in Download › XiaomiEditor › temp. Temporary copies are cleaned up automatically.
 - **Install via Theme Editor** (HyperOS 3) — see below.
 
 ## Applying themes on HyperOS 3
@@ -84,7 +84,7 @@ HyperOS resets themes that weren't bought from the Themes store, usually after a
 
 If you want your theme to stay applied, [Zyper](https://play.google.com/store/apps/details?id=com.htetz.zyper) is a separate app on the Play Store built for exactly that. Install it, run through its setup checklist, and leave it running alongside your theme. It's made by another developer and isn't part of this project.
 
-On MIUI / HyperOS versions that still have the theme manager's direct apply route, this app's own **Keeper** tab re-applies your theme after reboots instead.
+On MIUI / HyperOS versions that still have the theme manager's direct apply route, this app's own **Keeper** tab re-applies your theme after reboots and whenever you tap **Re-apply now**. Turn on Shizuku (or the pop-up permissions in the Keeper's checklist) so it can do that right after boot.
 
 ## Building
 

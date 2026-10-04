@@ -168,7 +168,7 @@ fun EditorScreen(
 
     Column(Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(if (state.hasProject) state.meta.title else "Theme editor", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            title = { Text(if (state.hasProject) state.meta.title else "Theme builder", maxLines = 1, overflow = TextOverflow.Ellipsis) },
             actions = {
                 IconButton(onClick = { menu = true }) { Icon(Icons.Outlined.MoreVert, "Menu") }
                 DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
@@ -301,14 +301,15 @@ private fun PickTheme(state: EditorState, vm: EditorViewModel, onOpen: () -> Uni
     ) {
         item { StatusBanner(state.busy, state.message, vm::dismissMessage) }
         item { Icon(Icons.Outlined.Brush, null, Modifier.size(56.dp), tint = MaterialTheme.colorScheme.primary) }
-        item { Text("Make a HyperOS theme", style = MaterialTheme.typography.headlineSmall) }
+        item { Text("Build a HyperOS theme", style = MaterialTheme.typography.headlineSmall) }
         item {
             Text(
-                "Open a .mtz to edit it, pick one from a folder (like MIUI/theme or Download), or start from scratch. " +
-                    "Then edit its icons, fonts, wallpaper, colours and boot animation before exporting it.",
+                "Start from scratch, or build on an existing theme — a .mtz, one from a folder, or one installed on your phone. " +
+                    "Add icons, fonts, wallpapers, colours, sounds and a boot animation, then export or apply it.",
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
             )
         }
+        item { Button(onClick = vm::newTheme, modifier = Modifier.fillMaxWidth()) { Text("Start from scratch") } }
         if (state.shizuku != app.xeditor.shizuku.ShizukuShell.Status.READY) item {
             ShizukuCard(
                 state.shizuku,
@@ -318,10 +319,10 @@ private fun PickTheme(state: EditorState, vm: EditorViewModel, onOpen: () -> Uni
             )
         }
         item {
-            Button(
+            OutlinedButton(
                 onClick = vm::listInstalled, modifier = Modifier.fillMaxWidth(),
                 enabled = state.shizuku == app.xeditor.shizuku.ShizukuShell.Status.READY,
-            ) { Text("Pick an installed theme") }
+            ) { Text("Build on an installed theme") }
         }
         val installed = state.installedThemes.orEmpty()
         if (installed.isNotEmpty()) {
@@ -348,9 +349,8 @@ private fun PickTheme(state: EditorState, vm: EditorViewModel, onOpen: () -> Uni
                 }
             }
         }
-        item { OutlinedButton(onClick = onOpen, modifier = Modifier.fillMaxWidth()) { Text("Open .mtz") } }
-        item { FilledTonalButton(onClick = onFolder, modifier = Modifier.fillMaxWidth()) { Text("Pick a theme from a folder") } }
-        item { OutlinedButton(onClick = vm::newTheme, modifier = Modifier.fillMaxWidth()) { Text("Start from scratch") } }
+        item { OutlinedButton(onClick = onOpen, modifier = Modifier.fillMaxWidth()) { Text("Build on a .mtz file") } }
+        item { OutlinedButton(onClick = onFolder, modifier = Modifier.fillMaxWidth()) { Text("Build on a theme from a folder") } }
         val folder = state.folderThemes.orEmpty()
         if (folder.isNotEmpty()) {
             item { Text("Themes in that folder", style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth()) }

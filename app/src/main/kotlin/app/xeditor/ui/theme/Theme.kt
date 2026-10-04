@@ -15,6 +15,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
+/**
+ * Material You: on Android 12+ the colours come from the phone's system palette
+ * (generated from the wallpaper), in light or dark to match the system setting.
+ */
 @Composable
 fun XEditorTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -33,8 +37,7 @@ fun XEditorTheme(
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colors.surface.toArgb()
-            WindowCompat.getInsetsController(window, view)
-                .isAppearanceLightStatusBars = !darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 

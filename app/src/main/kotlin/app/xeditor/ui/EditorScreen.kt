@@ -317,6 +317,27 @@ private fun PickTheme(state: EditorState, vm: EditorViewModel, onOpen: () -> Uni
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
             )
         }
+        if (state.hasProject) item {
+            // Set apart from the "start something new" buttons: taller, its own tint, extra space below.
+            Column(Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 20.dp)) {
+                Button(
+                    onClick = vm::continueEditing,
+                    modifier = Modifier.fillMaxWidth().height(68.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    ),
+                ) {
+                    Icon(Icons.Outlined.Brush, null)
+                    Spacer(Modifier.size(10.dp))
+                    Column {
+                        Text("Continue with", style = MaterialTheme.typography.labelMedium)
+                        Text(state.meta.title, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                }
+            }
+        }
         item { Button(onClick = vm::newTheme, modifier = Modifier.fillMaxWidth()) { Text("Start from scratch") } }
         if (state.shizuku != app.xeditor.shizuku.ShizukuShell.Status.READY) item {
             ShizukuCard(
@@ -378,9 +399,7 @@ private fun PickTheme(state: EditorState, vm: EditorViewModel, onOpen: () -> Uni
                 }
             }
         }
-        if (state.hasProject) {
-            item { OutlinedButton(onClick = vm::continueEditing, modifier = Modifier.fillMaxWidth()) { Text("Continue with “${state.meta.title}”") } }
-        }
+
     }
 }
 

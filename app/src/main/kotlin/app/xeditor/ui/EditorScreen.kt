@@ -166,9 +166,18 @@ fun EditorScreen(
     var showExport by remember { mutableStateOf(false) }
     if (showExport) ExportDialog(state, vm) { showExport = false }
 
+    val onStartPage = !state.hasProject || state.showStart || state.folderThemes != null || state.installedThemes != null
+    // From a theme, back goes to the start page rather than closing the app.
+    androidx.activity.compose.BackHandler(enabled = !onStartPage) { vm.goHome() }
+    // From the start page with a theme open, back returns to that theme's lists closing first.
+    androidx.activity.compose.BackHandler(enabled = state.hasProject && (state.folderThemes != null || state.installedThemes != null)) { vm.closeFolder() }
+
     Column(Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(if (state.hasProject) state.meta.title else "Theme builder", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            title = { Text(if (state.hasProject && !onStartPage) state.meta.title else "Theme builder", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            navigationIcon = {
+                if (!onStartPage) IconButton(onClick = vm::goHome) { Icon(Icons.Outlined.Home, "Start page") }
+            },
             actions = {
                 IconButton(onClick = { menu = true }) { Icon(Icons.Outlined.MoreVert, "Menu") }
                 DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
@@ -192,8 +201,7 @@ fun EditorScreen(
             },
         )
 
-        val folder = state.folderThemes
-        if (!state.hasProject || folder != null || state.installedThemes != null) {
+        if (onStartPage) {
             PickTheme(
                 state, vm,
                 onOpen = { openMtz.launch(arrayOf("*/*")) },
@@ -370,8 +378,8 @@ private fun PickTheme(state: EditorState, vm: EditorViewModel, onOpen: () -> Uni
                 }
             }
         }
-        if (state.hasProject && (state.folderThemes != null || state.installedThemes != null)) {
-            item { OutlinedButton(onClick = vm::closeFolder) { Text("Back to current theme") } }
+        if (state.hasProject) {
+            item { OutlinedButton(onClick = vm::continueEditing, modifier = Modifier.fillMaxWidth()) { Text("Continue with “${state.meta.title}”") } }
         }
     }
 }

@@ -69,6 +69,8 @@ data class EditorState(
     val shizuku: ShizukuShell.Status = ShizukuShell.Status.NOT_INSTALLED,
     /** Themes in the Themes app, read through Shizuku; null until listed. */
     val installedThemes: List<ThemeStore.Installed>? = null,
+    /** Start page shown while a theme is open (home button / back). */
+    val showStart: Boolean = false,
     /** Title of the theme just installed, so the UI can point at it. */
     val justInstalled: String? = null,
     /** False on HyperOS 3+, whose Themes app only applies themes carrying a Xiaomi licence. */
@@ -134,7 +136,7 @@ class EditorViewModel(app: Application) : AndroidViewModel(app) {
             _state.update {
                 snapshot.copy(
                     folderThemes = it.folderThemes, installedThemes = it.installedThemes, justInstalled = it.justInstalled,
-                    mixComponents = it.mixComponents, mixName = it.mixName,
+                    mixComponents = it.mixComponents, mixName = it.mixName, showStart = it.showStart,
                     busy = it.busy, message = it.message,
                     revision = it.revision + 1,
                 )
@@ -160,6 +162,7 @@ class EditorViewModel(app: Application) : AndroidViewModel(app) {
 
     fun newTheme() = work("Creating theme…") {
         withContext(Dispatchers.IO) { project.newBlank(); edits.clearAll() }
+        _state.update { it.copy(showStart = false) }
         "Started a new theme"
     }
 
@@ -169,6 +172,7 @@ class EditorViewModel(app: Application) : AndroidViewModel(app) {
                 ?: error("Can't read that file")
             edits.clearAll()
         }
+        _state.update { it.copy(showStart = false, folderThemes = null) }
         "Opened ${ctx.displayNameOf(uri)}"
     }
 
@@ -208,6 +212,10 @@ class EditorViewModel(app: Application) : AndroidViewModel(app) {
 
     fun closeFolder() = _state.update { it.copy(folderThemes = null, installedThemes = null) }
 
+    fun goHome() = _state.update { it.copy(showStart = true) }
+
+    fun continueEditing() = _state.update { it.copy(showStart = false, folderThemes = null, installedThemes = null) }
+
     // ---- Shizuku: the Themes app's own store ----
 
     fun requestShizuku() = ShizukuShell.requestPermission { refresh() }
@@ -227,7 +235,7 @@ class EditorViewModel(app: Application) : AndroidViewModel(app) {
             tmp.delete()
             edits.clearAll()
         }
-        _state.update { it.copy(installedThemes = null, folderThemes = null) }
+        _state.update { it.copy(installedThemes = null, folderThemes = null, showStart = false) }
         "Opened ${t.title}"
     }
 
